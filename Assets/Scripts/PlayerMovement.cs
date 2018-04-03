@@ -3,7 +3,10 @@
 public class PlayerMovement : MonoBehaviour
 {
     public float speed = 6f;
-   
+	public bool moveBasedOnRotation;
+	public bool ADTurn;
+	public float smooth = 5.0f;
+    public float tiltAngle = 360.0f;
     Vector3 movement;
     Rigidbody playerRigidbody;
     int floorMask;
@@ -28,11 +31,23 @@ public class PlayerMovement : MonoBehaviour
             sprint = false;
         }
         Move(h, v);
-        Turning();
+        Turning(h);
     }
     private void Move(float h, float v)
     {
-        movement.Set(h, 0f, v);
+        if(ADTurn)
+		{
+			movement = v * Vector3.forward;
+		}
+		else
+		{
+			movement.Set(h, 0f, v);
+		}
+		if(moveBasedOnRotation)
+		{
+			movement = transform.rotation * movement;
+
+		}
         if(sprint)
         {
             movement = movement.normalized * speed * Time.deltaTime * 1.5f;
@@ -41,21 +56,34 @@ public class PlayerMovement : MonoBehaviour
         {
             movement = movement.normalized * speed * Time.deltaTime;
         }
-
+		Debug.Log(movement);
         playerRigidbody.MovePosition(transform.position + movement);
     }
-    private void Turning()
+    private void Turning(float h)
     {
-        Ray camRay = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit floorHit;
-        if(Physics.Raycast(camRay, out floorHit, camRayLength, floorMask))
-        {
-            Vector3 playerToMouse = floorHit.point - transform.position;
-            playerToMouse.y = 0f;
+		
+		if(ADTurn)
+		{	
+			transform.Rotate(new Vector3(0, h, 0)*Time.deltaTime*tiltAngle);
+			/*float rotateHorizontal = h * tiltAngle;
+			Quaternion target = Quaternion.Euler(0, rotateHorizontal, 0);
+			//moves back to default rotation
+			transform.rotation = Quaternion.Slerp(transform.rotation, target,  Time.deltaTime * smooth);*/
+		}
+		else
+		{
+			Ray camRay = Camera.main.ScreenPointToRay(Input.mousePosition);
+			RaycastHit floorHit;
+			if(Physics.Raycast(camRay, out floorHit, camRayLength, floorMask))
+			{
+				Vector3 playerToMouse = floorHit.point - transform.position;
+				playerToMouse.y = 0f;
 
-            Quaternion newRotation = Quaternion.LookRotation(playerToMouse);
-            playerRigidbody.MoveRotation(newRotation);
-        }
+				Quaternion newRotation = Quaternion.LookRotation(playerToMouse);
+				playerRigidbody.MoveRotation(newRotation);
+			}
+		}
+        
     }
     
 }

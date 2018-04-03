@@ -27,7 +27,6 @@ public class WanderState : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
        Debug.DrawLine(transform.position, _controller.destination, Color.blue);
-       Debug.Log(transform.position - _controller.destination);
         if (transform.position.x - _controller.destination.x <=1 && transform.position.z - _controller.destination.z <= 0)
         {
             Debug.Log("has arrived");
