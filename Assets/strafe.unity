@@ -680,7 +680,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 1174448840}
-  followRotation: 1
+  followRotation: 0
   smoothing: 5
 --- !u!81 &42507613
 AudioListener:
@@ -719,7 +719,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 0
-  orthographic size: 50
+  orthographic size: 25
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
@@ -17445,7 +17445,12 @@ Prefab:
     - target: {fileID: 114258946737421660, guid: 3884d8e14d8f7344c95bbeec534a8b14,
         type: 2}
       propertyPath: followRotation
-      value: 1
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 20102957119976824, guid: 3884d8e14d8f7344c95bbeec534a8b14,
+        type: 2}
+      propertyPath: orthographic size
+      value: 25
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 3884d8e14d8f7344c95bbeec534a8b14, type: 2}

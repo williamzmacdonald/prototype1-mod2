@@ -37,13 +37,13 @@ public class PlayerMovement : MonoBehaviour
     {
         if(ADTurn)
 		{
-			movement = v * Vector3.forward;
+			movement = (v * Vector3.forward);
 		}
 		else
 		{
 			movement.Set(h, 0f, v);
 		}
-		if(moveBasedOnRotation)
+		if(moveBasedOnRotation || ADTurn)
 		{
 			movement = transform.rotation * movement;
 
@@ -57,14 +57,18 @@ public class PlayerMovement : MonoBehaviour
             movement = movement.normalized * speed * Time.deltaTime;
         }
 		Debug.Log(movement);
-        playerRigidbody.MovePosition(transform.position + movement);
+		transform.position = transform.position + movement;
+        //playerRigidbody.MovePosition(transform.position + movement);
     }
     private void Turning(float h)
     {
 		
 		if(ADTurn)
 		{	
-			transform.Rotate(new Vector3(0, h, 0)*Time.deltaTime*tiltAngle);
+			transform.rotation = Quaternion.Euler(0,transform.rotation.eulerAngles.y - (-h * tiltAngle * Time.deltaTime),0);
+	
+			//transform.Rotate(new Vector3(0, h, 0)*Time.deltaTime*tiltAngle);
+			
 			/*float rotateHorizontal = h * tiltAngle;
 			Quaternion target = Quaternion.Euler(0, rotateHorizontal, 0);
 			//moves back to default rotation
