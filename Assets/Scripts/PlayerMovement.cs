@@ -12,8 +12,10 @@ public class PlayerMovement : MonoBehaviour
     int floorMask;
     float camRayLength = 100f;
     bool sprint;
+    Heartbeat _heartbeat;
     private void Awake()
     {
+        _heartbeat = GetComponent<Heartbeat>();
         sprint = false;
         floorMask = LayerMask.GetMask("Floor");
         playerRigidbody = GetComponent<Rigidbody>();
@@ -25,10 +27,12 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetKey(KeyCode.LeftShift))
         {
             sprint = true;
+            _heartbeat.Running();
         }
         else
         {
             sprint = false;
+            _heartbeat.Walking();
         }
         Move(h, v);
         Turning(h);
@@ -56,7 +60,6 @@ public class PlayerMovement : MonoBehaviour
         {
             movement = movement.normalized * speed * Time.deltaTime;
         }
-		Debug.Log(movement);
 		transform.position = transform.position + movement;
         //playerRigidbody.MovePosition(transform.position + movement);
     }
